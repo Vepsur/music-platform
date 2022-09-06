@@ -24,3 +24,11 @@ export const setCurrentTime = (payload: number): PlayerAction => {
 export const setActiveTrack = (payload: ITrack): PlayerAction => {
   return {type: PlayerActionTypes.SET_ACTIVE, payload}
 }
+
+export const setPreviousTrack = (payload: ITrack): PlayerAction => {
+  return {type: PlayerActionTypes.SET_PREVIOUS, payload}
+}
+
+export const clickPlayPause = (payload: boolean): PlayerAction => {
+  return {type: PlayerActionTypes.SET_CLICK_PLAY_PAUSE, payload}
+}

@@ -15,13 +15,12 @@ interface TrackItemProps {
   track: ITrack;
 }
 
-let audio;
-
 const TrackItem: React.FC<TrackItemProps> = ({ track }) => {
   const router = useRouter();
-  const { playTrack, pauseTrack, setActiveTrack } = useActions();
-  const { pause, active, currentTime } = useTypeSelector(state => state.player);
+  const { playTrack, pauseTrack, setActiveTrack, setPreviousTrack, clickPlayPause } = useActions();
+  const { pause, active, previous, currentTime, volume, click } = useTypeSelector(state => state.player);
   const [duration, setDuration] = useState(0);
+  const [audio, setAudio] = useState(null);
 
   const durationMinutes = timePipe(`${Math.trunc(duration / 60)}`);
   const durationSeconds = timePipe(`${duration % 60}`);
@@ -38,8 +37,9 @@ const TrackItem: React.FC<TrackItemProps> = ({ track }) => {
 
   const play = (e) => {
     if (e) e.stopPropagation();
+    setPreviousTrack(active);
     setActiveTrack(track);
-    playTrack();
+    clickPlayPause(!click);
   }
 
   const deleteTrack = async (e) => {
@@ -50,7 +50,6 @@ const TrackItem: React.FC<TrackItemProps> = ({ track }) => {
   }
 
   return (
-
     <Card className={styles.track} onClick={() => router.push('/tracks/' + track._id)}>
       <IconButton onClick={(e) => play(e)}>
         {track === active && !pause

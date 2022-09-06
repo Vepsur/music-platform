@@ -6,24 +6,29 @@ import { ITrack } from '../types/tracks'
 import TrackProgress from './TrackProgress'
 import { useTypeSelector } from '../hooks/useTypeSelector'
 import { useActions } from '../hooks/useActions'
+import { setPreviousTrack } from '../store/actions-creators/player'
 
 let audio;
 
 const Player = () => {
-  const { pauseTrack, playTrack, setVolume, setCurrentTime, setDuration, setActiveTrack } = useActions();
-  const { pause, volume, active, duration, currentTime } = useTypeSelector(state => state.player);
+  const { pauseTrack, playTrack, setVolume, setCurrentTime, setDuration, setActiveTrack, setPreviousTrack } = useActions();
+  const { pause, volume, active, previous, duration, currentTime, click } = useTypeSelector(state => state.player);
 
   useEffect(() => {
-    if (!audio) {
+    if (!audio || !active) {
       audio = new Audio();
     } else {
       setAudio();
       play();
     }
-  }, [active])
+  }, [active, previous, click])
 
   const setAudio = () => {
-    if (active) {
+    console.log(active);
+    console.log(previous);
+    console.log(active !== previous);
+    
+    if (active && active !== previous) {
       audio.src = 'http://localhost:5000/' + active.audio;
       audio.volume = volume / 100;
       audio.onloadedmetadata = () => {
@@ -35,10 +40,10 @@ const Player = () => {
     }
   }
 
-  const play = () => {
-    if (pause) {
+  const play = (clickOnPlayer = false) => {
+    if (pause || (active !== previous && !clickOnPlayer)) {
       playTrack();
-      audio.play()
+      audio.play();
     } else {
       pauseTrack();
       audio.pause();
@@ -61,7 +66,7 @@ const Player = () => {
 
   return (
     <div className={styles.player}>
-      <IconButton onClick={play}>
+      <IconButton onClick={() => play(true)}>
         {!pause
           ? <Pause />
           : <PlayArrow />
