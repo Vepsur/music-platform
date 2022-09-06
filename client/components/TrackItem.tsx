@@ -6,32 +6,35 @@ import { Delete, Pause, PlayArrow } from '@mui/icons-material'
 import { useRouter } from 'next/router';
 import { useActions } from '../hooks/useActions';
 import axios from 'axios';
+import { useTypeSelector } from '../hooks/useTypeSelector';
 
 
 interface TrackItemProps {
   track: ITrack;
-  active?: boolean;
 }
 
-const TrackItem: React.FC<TrackItemProps> = ({ track, active = false }) => {
+const TrackItem: React.FC<TrackItemProps> = ({ track }) => {
   const router = useRouter();
   const { playTrack, pauseTrack, setActiveTrack } = useActions();
+  const { pause, active } = useTypeSelector(state => state.player)
 
   const play = (e) => {
-    e.stopPropagation();
+    if (e) e.stopPropagation();
     setActiveTrack(track);
     playTrack();
   }
 
   const deleteTrack = async (e) => {
     e.stopPropagation();
-    const response = await axios.delete('http://localhist:5000/tracks/' + track._id)
+    console.log(track._id);
+    
+    const response = await axios.delete('http://localhost:5000/tracks/' + track._id);
   }
 
   return (
     <Card className={styles.track} onClick={() => router.push('/tracks/' + track._id)}>
       <IconButton onClick={(e) => play(e)}>
-        {active
+        {track === active && !pause
           ? <Pause />
           : <PlayArrow />
         }

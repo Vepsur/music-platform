@@ -11,7 +11,7 @@ let audio;
 
 const Player = () => {
   const { pauseTrack, playTrack, setVolume, setCurrentTime, setDuration, setActiveTrack } = useActions();
-  const { pause, volume, active, duration, currentTime } = useTypeSelector(state => state.player)
+  const { pause, volume, active, duration, currentTime } = useTypeSelector(state => state.player);
 
   useEffect(() => {
     if (!audio) {
@@ -78,4 +78,4 @@ const Player = () => {
   )
 }
 
-export default Player
+export default Player;
