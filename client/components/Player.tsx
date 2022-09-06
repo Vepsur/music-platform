@@ -73,7 +73,7 @@ const Player = () => {
       </Grid>
       <TrackProgress left={currentTime} right={duration} onChange={changeCurrentTime} />
       <VolumeUp style={{ marginLeft: 'auto' }} />
-      <TrackProgress left={volume} right={100} onChange={changeVolume} />
+      <TrackProgress left={volume} right={100} type={'volume'} onChange={changeVolume} />
     </div>
   )
 }
