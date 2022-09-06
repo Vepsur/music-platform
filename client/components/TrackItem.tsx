@@ -38,7 +38,7 @@ const TrackItem: React.FC<TrackItemProps> = ({ track }) => {
   const play = (e) => {
     if (e) e.stopPropagation();
     setPreviousTrack(active);
-    setActiveTrack(track);
+    if (active !== track) setActiveTrack(track);
     clickPlayPause(!click);
   }
 

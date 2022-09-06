@@ -14,6 +14,7 @@ const Player = () => {
   const { pauseTrack, playTrack, setVolume, setCurrentTime, setDuration, setActiveTrack, setPreviousTrack } = useActions();
   const { pause, volume, active, previous, duration, currentTime, click } = useTypeSelector(state => state.player);
 
+
   useEffect(() => {
     if (!audio || !active) {
       audio = new Audio();
@@ -23,11 +24,8 @@ const Player = () => {
     }
   }, [active, previous, click])
 
+
   const setAudio = () => {
-    console.log(active);
-    console.log(previous);
-    console.log(active !== previous);
-    
     if (active && active !== previous) {
       audio.src = 'http://localhost:5000/' + active.audio;
       audio.volume = volume / 100;
